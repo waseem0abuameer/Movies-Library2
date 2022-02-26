@@ -4,15 +4,21 @@ const axios = require("axios");
 const dotenv = require("dotenv");
 const movies = require("./Movie Data/data.json")
 const app = express();
+const pg = require("pg");
 dotenv.config();
 const APIKEY = process.env.APIKEY;
 const PORT = process.env.PORT;
+const DATABASE_URL = process.env.DATABASE_URL;
+const client = new pg.Client(DATABASE_URL);
+app.use(express.json());
 app.get('/', DataMovieHandler);
 app.get('/favorite', FavoriteMovieHandler);
 app.get('/trending', trendingMovieHandler);
 app.get('/search', searchMovieHandler);
 app.get('/upcoming', upcomingMovieHandler);
 app.get('/toprated', ratedMovieHandler);
+app.post('/addmovies', addMovieHandler);
+app.get('/getmovies', getHandler);
 app.use('*', wrongHandler);
 app.use('/', notfoundHandler);
 //app.use(errorHandler);
@@ -92,6 +98,27 @@ function upcomingMovieHandler(req, res) {
         });
 }
 
+function addMovieHandler(req, res) {
+    const movie = req.body;
+    const sql = `INSERT INTO TMovies(title, poster_path, overview) VALUES($1, $2, $3) RETURNING *`;
+    const values = [movie.title, movie.poster_path, movie.overview];
+    client.query(sql, values).then((result) => {
+        res.status(201).json(result.rows);
+    }).catch((error) => {
+        console.log(error);
+        serverError(error, req, res);
+    });
+}
+
+function getHandler(req, res) {
+    const sql = `SELECT * FROM TMovies`;
+
+    client.query(sql).then((result) => { return res.status(200).json(result.rows); }).catch((error) => {
+        serverError(error, req, res);
+    })
+
+}
+
 function FavoriteMovieHandler(req, res) {
     return res.send("Welcome to Favorite Page");
 }
@@ -111,6 +138,8 @@ function wrongHandler(req, res) {
 function notfoundHandler(req, res) {
     return res.status(404).send("not found")
 }
-app.listen(PORT, () => {
-    console.log(`Listen ${PORT}`);
-});
+client.connect().then(() => {
+    app.listen(PORT, () => {
+        console.log(`Listen ${PORT}`);
+    });
+})
