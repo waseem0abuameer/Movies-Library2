@@ -19,6 +19,10 @@ app.get('/upcoming', upcomingMovieHandler);
 app.get('/toprated', ratedMovieHandler);
 app.post('/addmovies', addMovieHandler);
 app.get('/getmovies', getHandler);
+app.get('/getbyid/:id', getbyidHandler);
+app.put('/UPmovies/:id', UPmoviesHandler);
+app.delete('/DEmovies/:id', DEMovieHandler);
+
 app.use('*', wrongHandler);
 app.use('/', notfoundHandler);
 //app.use(errorHandler);
@@ -110,6 +114,16 @@ function addMovieHandler(req, res) {
     });
 }
 
+function getbyidHandler(req, res) {
+    let id = req.params.id;
+    const sql = `SELECT * FROM TMovies WHERE id = $1;`;
+    const value = [id];
+    client.query(sql, value).then((result) => { return res.status(200).json(result.rows[0]); })
+        .catch((error) => {
+            serverError(error, req, res);
+        });
+}
+
 function getHandler(req, res) {
     const sql = `SELECT * FROM TMovies`;
 
@@ -117,6 +131,34 @@ function getHandler(req, res) {
         serverError(error, req, res);
     })
 
+}
+
+function UPmoviesHandler(req, res) {
+    const id = req.params.id;
+    const m = req.body;
+
+    const sql = `UPDATE TMovies SET title = $1,poster_path = $2, overview = $3 WHERE id = $4  RETURNING *;`;
+    const values = [m.title, m.poster_path, m.overview, id];
+    client.query(sql, values).then((result) => {
+            return res.status(200).json(result.rows);
+        })
+        .catch((error) => {
+            serverError(error, req, res);
+        });
+}
+
+function DEMovieHandler(req, res) {
+    const id = req.params.id;
+    const sql = `DELETE FROM TMovies WHERE id=$1;`;
+    const values = [id];
+    client
+        .query(sql, values)
+        .then(() => {
+            return res.status(204).json({});
+        })
+        .catch((error) => {
+            serverError(error, req, res);
+        });
 }
 
 function FavoriteMovieHandler(req, res) {
