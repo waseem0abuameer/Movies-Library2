@@ -68,3 +68,21 @@ when make http://localhost:3003/ give data moves
 when make http://localhost:3003/ give data moves
 , http://localhost:3003/favorite give favorite moves from data
 3-make pint init (getmovies======addmovies);
+# The Movie  - V4.0
+
+**Author Name**: Waseem Abuameer
+
+## WRRC
+![image](img/WRRC4.jpg)
+
+
+
+## Getting Started
+<!-- What are the steps that a user must take in order to build this app on their own machine and get it running? -->
+
+
+## Project Features
+<!-- What are the features included in you app -->
+when make http://localhost:3003/ give data moves
+, http://localhost:3003/favorite give favorite moves from data
+3-make pint init (getbyid======updaet===delete);
