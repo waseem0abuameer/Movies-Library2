@@ -9,7 +9,10 @@ dotenv.config();
 const APIKEY = process.env.APIKEY;
 const PORT = process.env.PORT;
 const DATABASE_URL = process.env.DATABASE_URL;
-const client = new pg.Client(DATABASE_URL);
+const client = new pg.Client({
+    connectionString: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false }
+});
 app.use(express.json());
 app.get('/', DataMovieHandler);
 app.get('/favorite', FavoriteMovieHandler);
