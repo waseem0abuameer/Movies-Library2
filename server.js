@@ -5,9 +5,11 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const movies = require("./Movie Data/data.json")
 const app = express();
+const cors = require("cors");
 const pg = require("pg");
 app.use(cors());
 dotenv.config();
+
 
 const APIKEY = process.env.APIKEY;
 const PORT = process.env.PORT;
