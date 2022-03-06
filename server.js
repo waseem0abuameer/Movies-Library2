@@ -1,7 +1,6 @@
 'user strict'
 const express = require("express");
 const axios = require("axios");
-const cors = require("cors");
 const dotenv = require("dotenv");
 const movies = require("./Movie Data/data.json")
 const app = express();
@@ -30,7 +29,6 @@ app.get('/getmovies', getHandler);
 app.get('/getbyid/:id', getbyidHandler);
 app.put('/UPmovies/:id', UPmoviesHandler);
 app.delete('/DEmovies/:id', DEMovieHandler);
-app.use(cors());
 app.use('*', wrongHandler);
 app.use('/', notfoundHandler);
 //app.use(errorHandler);
