@@ -6,6 +6,7 @@ const dotenv = require("dotenv");
 const movies = require("./Movie Data/data.json")
 const app = express();
 const pg = require("pg");
+app.use(cors());
 dotenv.config();
 
 const APIKEY = process.env.APIKEY;
