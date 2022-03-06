@@ -18,6 +18,7 @@ const client = new pg.Client({
   ssl: { rejectUnauthorized: false }
 });
 app.use(express.json());
+app.use(cors());
 app.get('/', DataMovieHandler);
 app.get('/favorite', FavoriteMovieHandler);
 app.get('/trending', trendingMovieHandler);
