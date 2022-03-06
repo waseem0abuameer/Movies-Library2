@@ -1,11 +1,13 @@
 'user strict'
 const express = require("express");
 const axios = require("axios");
+const cors = require("cors");
 const dotenv = require("dotenv");
 const movies = require("./Movie Data/data.json")
 const app = express();
 const pg = require("pg");
 dotenv.config();
+
 const APIKEY = process.env.APIKEY;
 const PORT = process.env.PORT;
 const DATABASE_URL = process.env.DATABASE_URL;
