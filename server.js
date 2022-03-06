@@ -7,16 +7,16 @@ const movies = require("./Movie Data/data.json")
 const app = express();
 const cors = require("cors");
 const pg = require("pg");
-app.use(cors());
+
 dotenv.config();
 
 
 const APIKEY = process.env.APIKEY;
 const PORT = process.env.PORT;
-const DATABASE_URL = process.env.DATABASE_URL;
+//const DATABASE_URL = process.env.DATABASE_URL;
 const client = new pg.Client({
-    connectionString: process.env.DATABASE_URL,
-    ssl: { rejectUnauthorized: false }
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false }
 });
 app.use(express.json());
 app.get('/', DataMovieHandler);
@@ -30,7 +30,7 @@ app.get('/getmovies', getHandler);
 app.get('/getbyid/:id', getbyidHandler);
 app.put('/UPmovies/:id', UPmoviesHandler);
 app.delete('/DEmovies/:id', DEMovieHandler);
-
+app.use(cors());
 app.use('*', wrongHandler);
 app.use('/', notfoundHandler);
 //app.use(errorHandler);
